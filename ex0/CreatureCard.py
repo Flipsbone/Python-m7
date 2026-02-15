@@ -1,5 +1,4 @@
 from ex0.Card import Card
-from typing import Dict, Union
 
 
 class CreatureCard(Card):
@@ -15,7 +14,7 @@ class CreatureCard(Card):
         self.attack = attack
         self.health = health
 
-    def play(self, game_state: Dict) -> Dict:
+    def play(self, game_state: dict) -> dict:
         print()
         if not self.is_playable(game_state["mana"]):
             print(f'\nTesting insufficient mana {game_state["mana"]}')
@@ -32,12 +31,12 @@ class CreatureCard(Card):
         }
         return play_result
 
-    def attack_target(self, target) -> Dict[str, str | int]:
+    def attack_target(self, target) -> dict[str, str | int]:
         print(f"{self.name} attacks {target.name}")
         target.health -= self.attack
         if target.health < 0:
             target.health = 0
-        attack_result: Dict[str, str | int] = {
+        attack_result: dict[str, str | int] = {
             "attacker": self.name,
             "target": target.name,
             "damage_dealt": self.attack,
@@ -45,9 +44,9 @@ class CreatureCard(Card):
         }
         return attack_result
 
-    def get_card_info(self) -> Dict:
+    def get_card_info(self) -> dict:
         print("CreatureCard Info:")
-        card_info: Dict[str, Union[str, int]] = super().get_card_info()
+        card_info: dict[str, str | int] = super().get_card_info()
         card_info['type'] = "Creature"
         card_info['attack'] = self.attack
         card_info['health'] = self.health
