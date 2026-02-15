@@ -28,7 +28,7 @@ def init_game_state() -> dict[str, int]:
     return game_state
 
 
-def created_creature() -> dict[str, CreatureCard]:
+def create_creature() -> dict[str, CreatureCard]:
     fire_dragon_card = CreatureCard("Fire Dragon", 5, "Legendary", 7, 5)
     goblin_warrior_card = CreatureCard("Goblin Warrior", 2, "Common", 2, 1)
     creatures_cards = {
@@ -40,7 +40,7 @@ def created_creature() -> dict[str, CreatureCard]:
 
 def main() -> None:
     print("=== DataDeck Card Foundation ===\n")
-    creatures_cards = created_creature()
+    creatures_cards = create_creature()
     creaturecard_info(creatures_cards)
     game_state = init_game_state()
     play_card(creatures_cards, game_state)
