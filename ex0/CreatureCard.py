@@ -15,14 +15,6 @@ class CreatureCard(Card):
         self.health = health
 
     def play(self, game_state: dict) -> dict:
-        print()
-        if not self.is_playable(game_state["mana"]):
-            print(f'\nTesting insufficient mana {game_state["mana"]}')
-            print("Playable: False\n")
-            return {}
-
-        print(f"Playing {self.name} with {game_state['mana']} mana available:")
-        print("Playable: True")
         game_state['mana'] -= self.cost
         play_result = {
             "card_played": self.name,
@@ -32,7 +24,6 @@ class CreatureCard(Card):
         return play_result
 
     def attack_target(self, target) -> dict[str, str | int]:
-        print(f"{self.name} attacks {target.name}")
         target.health -= self.attack
         if target.health < 0:
             target.health = 0
@@ -45,10 +36,8 @@ class CreatureCard(Card):
         return attack_result
 
     def get_card_info(self) -> dict:
-        print("CreatureCard Info:")
         card_info: dict[str, str | int] = super().get_card_info()
         card_info['type'] = "Creature"
         card_info['attack'] = self.attack
         card_info['health'] = self.health
-        print(f"{card_info}")
         return card_info

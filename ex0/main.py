@@ -4,21 +4,28 @@ from ex0.CreatureCard import CreatureCard
 def play_card(
         creatures_cards: dict[str, CreatureCard],
         game_state: dict[str, int]) -> None:
+
+    dragon = creatures_cards["fire_dragon"]
+    goblin = creatures_cards["goblin_warrior"]
+    if not dragon.is_playable(game_state["mana"]):
+            print(f"Testing insufficient mana {game_state['mana']}")
+            print("Playable: False\n")
+            return
+
+    print(f"Playing {dragon.name} with {game_state['mana']} mana available:")
+    print("Playable: True")
+
     play_result = creatures_cards["fire_dragon"].play(game_state)
-    print(f"{play_result}\n")
-    attack_result = (
-        creatures_cards["fire_dragon"].attack_target(
-            creatures_cards["goblin_warrior"])
-        )
+    print(f"Play result: {play_result}\n")
+    print(f"{dragon.name} attacks {goblin.name}")
+    attack_result = (dragon.attack_target(goblin))
     print(f"{attack_result}\n")
-    if game_state["mana"] < creatures_cards["fire_dragon"].cost:
-        print(f"Testing insufficient mana ({game_state["mana"]} available)")
-        print("Playable: False\n")
 
 
 def creaturecard_info(creatures_cards: dict[str, CreatureCard]) -> None:
-    print("Testing Abstract Base Class Design:")
-    creatures_cards["fire_dragon"].get_card_info()
+    print("Testing Abstract Base Class Design:\n")
+    print("CreatureCard Info:")
+    print(creatures_cards["fire_dragon"].get_card_info(), end="\n\n")
 
 
 def init_game_state() -> dict[str, int]:
@@ -43,6 +50,7 @@ def main() -> None:
     creatures_cards = create_creature()
     creaturecard_info(creatures_cards)
     game_state = init_game_state()
+    play_card(creatures_cards, game_state)
     play_card(creatures_cards, game_state)
     print("Abstract pattern successfully demonstrated!")
 

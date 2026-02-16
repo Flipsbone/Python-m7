@@ -1,6 +1,8 @@
 from ex0.CreatureCard import CreatureCard
 from ex1 import Deck, SpellCard, ArtifactCard
 
+def drawing_card(my_deck: Deck) -> None:
+    pass
 
 def building_deck(my_deck: Deck) -> None:
     fire_dragon_card = create_creature()['fire_dragon']
@@ -11,6 +13,9 @@ def building_deck(my_deck: Deck) -> None:
     my_deck.add_card(lightning_bolt_card)
     my_deck.add_card(mana_crystal_card)
     my_deck.get_deck_stats()
+    my_deck.shuffle()
+    for cards in my_deck.cards:
+        print(cards.get_card_info())
     print(f"Deck stats: {my_deck.get_deck_stats()}")
 
 
@@ -48,11 +53,12 @@ def init_game_state() -> dict[str, int]:
 
 
 def main():
-    print("=== DataDeck Deck Builder ===")
+    print("=== DataDeck Deck Builder ===\n")
     my_deck = Deck()
     game_state = init_game_state()
     print("Building deck with different card types...")
     building_deck(my_deck)
+    drawing_card(my_deck)
 
 if __name__ == "__main__":
     main()
