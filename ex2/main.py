@@ -3,10 +3,10 @@ from ex0.CreatureCard import CreatureCard
 
 
 def create_creature() -> dict[str, CreatureCard]:
-    fire_dragon_card = CreatureCard("Fire Dragon", 5, "Legendary", 7, 5)
+    enemy_card = CreatureCard("Enemy", 5, "Legendary", 7, 5)
     goblin_warrior_card = CreatureCard("Goblin Warrior", 2, "Common", 2, 1)
     creatures_cards = {
-        "fire_dragon": fire_dragon_card,
+        "enemy": enemy_card,
         "goblin_warrior": goblin_warrior_card
     }
     return creatures_cards
@@ -16,9 +16,19 @@ def playing_arcane(card: EliteCard) -> None:
     print(f"Playing {card.name} ({card.__class__.__name__}):\n")
     print("Combat phase:")
     creatures_cards = create_creature()
-    target = creatures_cards["fire_dragon"]
-    attack_res = card.attack(target)
+    player2 = creatures_cards["enemy"]
+    attack_res = card.attack(player2)
     print(f"Attack result: {attack_res}")
+
+    incoming_damage = player2.attack
+    defend_res = card.defend(incoming_damage)
+    print(f"Defense result: {defend_res}")
+
+    print("\nMagic phase:")
+    spell_res = card.cast_spell("Fireball", ["Enemy1", "Enemy2"])
+    print(f"Spell cast: {spell_res}")
+    channel_res = card.channel_mana(3)
+    print(f"Mana channel: {channel_res}\n")
 
 
 def elitecard_capabilities(card_class: EliteCard) -> None:
@@ -41,6 +51,7 @@ def main() -> None:
                                     7, 5, 3, 0)
     elitecard_capabilities(EliteCard)
     playing_arcane(Arcane_Warrior_card)
+    print("Multiple interface implementation successful!")
 
 
 if __name__ == "__main__":
