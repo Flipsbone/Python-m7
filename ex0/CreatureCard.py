@@ -1,4 +1,5 @@
 from ex0.Card import Card
+from ex0.Card import CardType
 
 
 class CreatureCard(Card):
@@ -13,6 +14,7 @@ class CreatureCard(Card):
                 raise ValueError(f"Error :{stat} must be positif integer")
         self.attack = attack
         self.health = health
+        self.card_type = CardType.CREATURE
 
     def play(self, game_state: dict) -> dict:
         game_state['mana'] -= self.cost
@@ -37,7 +39,7 @@ class CreatureCard(Card):
 
     def get_card_info(self) -> dict:
         card_info: dict[str, str | int] = super().get_card_info()
-        card_info['type'] = "Creature"
+        card_info['type'] = self.card_type.value
         card_info['attack'] = self.attack
         card_info['health'] = self.health
         return card_info

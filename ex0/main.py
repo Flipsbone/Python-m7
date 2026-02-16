@@ -8,9 +8,9 @@ def play_card(
     dragon = creatures_cards["fire_dragon"]
     goblin = creatures_cards["goblin_warrior"]
     if not dragon.is_playable(game_state["mana"]):
-            print(f"Testing insufficient mana {game_state['mana']}")
-            print("Playable: False\n")
-            return
+        print(f"Testing insufficient mana {game_state['mana']}")
+        print("Playable: False\n")
+        return
 
     print(f"Playing {dragon.name} with {game_state['mana']} mana available:")
     print("Playable: True")

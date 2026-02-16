@@ -7,9 +7,9 @@ def play_card(
         game_state: dict[str, int]) -> None:
 
     if not card_drawn.is_playable(game_state["mana"]):
-            print(f"Testing insufficient mana {game_state['mana']}")
-            print("Playable: False\n")
-            return
+        print(f"Testing insufficient mana {game_state['mana']}")
+        print("Playable: False\n")
+        return
 
     play_result = card_drawn.play(game_state)
     print(f"Play result: {play_result}\n")
@@ -77,6 +77,7 @@ def main():
     building_deck(my_deck)
     drawing_card(my_deck, game_state)
     print("Polymorphism in action: Same interface, different card behaviors!")
+
 
 if __name__ == "__main__":
     main()

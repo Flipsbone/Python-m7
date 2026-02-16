@@ -1,4 +1,5 @@
 from ex0.Card import Card
+from ex0.Card import CardType
 
 
 class ArtifactCard(Card):
@@ -12,6 +13,7 @@ class ArtifactCard(Card):
             raise ValueError(f"Error :{durability} must be positif integer")
         self.durability = durability
         self.effect = effect
+        self.card_type = CardType.ARTIFACT
 
     def play(self, game_state: dict) -> dict:
         game_state['mana'] -= self.cost
