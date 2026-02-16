@@ -1,8 +1,27 @@
 from ex0.CreatureCard import CreatureCard
 from ex1 import Deck, SpellCard, ArtifactCard
 
-def drawing_card(my_deck: Deck) -> None:
-    pass
+
+def play_card(
+        card_drawn: CreatureCard,
+        game_state: dict[str, int]) -> None:
+
+    if not card_drawn.is_playable(game_state["mana"]):
+            print(f"Testing insufficient mana {game_state['mana']}")
+            print("Playable: False\n")
+            return
+
+    play_result = card_drawn.play(game_state)
+    print(f"Play result: {play_result}\n")
+
+
+def drawing_card(my_deck: Deck, game_state: dict[str, int]) -> None:
+    print("Drawing and playing cards:\n")
+    while len(my_deck.cards) > 0:
+        card_drawn = my_deck.draw_card()
+        print(f"Drew:{card_drawn.name} ({card_drawn.__class__.__name__})")
+        play_card(card_drawn, game_state)
+
 
 def building_deck(my_deck: Deck) -> None:
     fire_dragon_card = create_creature()['fire_dragon']
@@ -14,9 +33,7 @@ def building_deck(my_deck: Deck) -> None:
     my_deck.add_card(mana_crystal_card)
     my_deck.get_deck_stats()
     my_deck.shuffle()
-    for cards in my_deck.cards:
-        print(cards.get_card_info())
-    print(f"Deck stats: {my_deck.get_deck_stats()}")
+    print(f"Deck stats: {my_deck.get_deck_stats()}\n")
 
 
 def create_artifact() -> dict[str, ArtifactCard]:
@@ -47,7 +64,7 @@ def create_creature() -> dict[str, CreatureCard]:
 
 def init_game_state() -> dict[str, int]:
     game_state = {
-        "mana": 8
+        "mana": 10
     }
     return game_state
 
@@ -58,7 +75,8 @@ def main():
     game_state = init_game_state()
     print("Building deck with different card types...")
     building_deck(my_deck)
-    drawing_card(my_deck)
+    drawing_card(my_deck, game_state)
+    print("Polymorphism in action: Same interface, different card behaviors!")
 
 if __name__ == "__main__":
     main()

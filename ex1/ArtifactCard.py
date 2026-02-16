@@ -14,14 +14,7 @@ class ArtifactCard(Card):
         self.effect = effect
 
     def play(self, game_state: dict) -> dict:
-        print()
-        if not self.is_playable(game_state["mana"]):
-            print(f'\nTesting insufficient mana {game_state["mana"]}')
-            print("Playable: False\n")
-            return {}
-
         game_state['mana'] -= self.cost
-
         play_result = {
             "card_played": self.name,
             "mana_used": self.cost,
