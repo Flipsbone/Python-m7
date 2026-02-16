@@ -29,8 +29,21 @@ class CardType(Enum):
 class Card(ABC):
     def __init__(self, name: str, cost: int, rarity: str) -> None:
         self.name = name
-        self.cost = cost
+        try:
+            Card.validate_data(cost)
+            self.cost = cost
+        except (TypeError, ValueError) as e:
+            print({e})
+            self.cost = 0
+
         self.rarity = CardRarity.safe_get(rarity)
+
+    @staticmethod
+    def validate_data(cost: int) -> None:
+        if not isinstance(cost, int):
+            raise TypeError(f"Error :{cost} must be an integer")
+        if cost < 0:
+            raise ValueError(f"Error :{cost} must be 0 or more")
 
     @abstractmethod
     def play(self, game_state: dict) -> dict:

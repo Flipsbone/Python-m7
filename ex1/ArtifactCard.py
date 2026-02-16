@@ -8,9 +8,9 @@ class ArtifactCard(Card):
                  durability: int, effect: str) -> None:
         super().__init__(name, cost, rarity)
         if not isinstance(durability, int):
-            raise TypeError(f"Error :{durability} must be positif integer")
+            raise TypeError(f"Error :{durability} must be integer")
         if durability <= 0:
-            raise ValueError(f"Error :{durability} must be positif integer")
+            raise ValueError(f"Error :{durability} must be 0 or more")
         self.durability = durability
         self.effect = effect
         self.card_type = CardType.ARTIFACT

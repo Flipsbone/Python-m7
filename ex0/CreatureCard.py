@@ -6,15 +6,26 @@ class CreatureCard(Card):
     def __init__(self, name: str, cost: int, rarity: str,
                  attack: int, health: int) -> None:
         super().__init__(name, cost, rarity)
-        stats = {"attack": attack, "health": health}
-        for stat, value in stats.items():
-            if not isinstance(value, int):
-                raise TypeError(f"Error :{stat} must be positif integer")
-            if value <= 0:
-                raise ValueError(f"Error :{stat} must be positif integer")
+        try:
+            CreatureCard.validate_data(attack, health)
+        except (TypeError, ValueError) as e:
+            print({e})
+            attack, health = 0, 1
         self.attack = attack
         self.health = health
         self.card_type = CardType.CREATURE
+
+    @staticmethod
+    def validate_data(attack: int, health: int) -> None:
+        if not isinstance(attack, int):
+            raise TypeError(f"Error :{attack} must be an integer")
+        if attack < 0:
+            raise ValueError(f"Error :{attack} must be 0 or more")
+
+        if not isinstance(health, int):
+            raise TypeError(f"Error :{health} must be integer")
+        if health <= 0:
+            raise ValueError(f"Error :{health} must be positif integer")
 
     def play(self, game_state: dict) -> dict:
         game_state['mana'] -= self.cost
