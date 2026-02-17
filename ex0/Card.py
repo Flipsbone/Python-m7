@@ -8,6 +8,7 @@ class CardRarity(Enum):
     RARE = "Rare"
     EPIC = "Epic"
     LEGENDARY = "Legendary"
+    UNKNOWN_RARITY = "Unknown_rarity"
 
     @classmethod
     def safe_get(cls, value: str):
@@ -15,8 +16,9 @@ class CardRarity(Enum):
             return cls(value)
         except ValueError:
             print(f"{value} of {cls.__name__} is not a define type so"
-                  "it would automatically transform into rarity: 'Common'")
-            return cls.COMMON
+                  "it would automatically transform into rarity:"
+                  "'Unknown_rarity'")
+            return cls.UNKNOWN_RARITY
 
 
 class CardType(Enum):
