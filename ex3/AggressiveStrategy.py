@@ -7,6 +7,8 @@ from ex3.GameStrategy import GameStrategy
 
 
 class AggressiveStrategy(GameStrategy):
+    def __init__(self, mana: int = 10):
+        self.mana = mana
 
     def execute_turn(self, hand: list, battlefield: list) -> dict:
         current_mana: int = self.mana
