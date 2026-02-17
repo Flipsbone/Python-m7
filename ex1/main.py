@@ -1,3 +1,4 @@
+from ex0.Card import Card
 from ex0.CreatureCard import CreatureCard
 from ex1.Deck import Deck
 from ex1.ArtifactCard import ArtifactCard
@@ -5,7 +6,7 @@ from ex1.SpellCard import SpellCard
 
 
 def play_card(
-        card_drawn: CreatureCard,
+        card_drawn: Card,
         game_state: dict[str, int]) -> None:
 
     if not card_drawn.is_playable(game_state["mana"]):

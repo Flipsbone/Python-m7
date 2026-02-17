@@ -36,7 +36,6 @@ class SpellCard(Card):
         self.effect_type = effect_type
         self._spell_type = SpellType.safe_get(self.effect_type)
         self.card_type = CardType.SPELL
-        self.damage = cost + 3
 
     def play(self, game_state: dict) -> dict:
         game_state['mana'] -= self.cost
@@ -48,6 +47,30 @@ class SpellCard(Card):
         return play_result
 
     def resolve_effect(self, targets: list) -> dict:
-        return {
-            "effect_resolution": f"{self.name} cast on {targets}",
-            }
+        power = self.cost
+        logs: list[str] = []
+
+        for target in targets:
+            try:
+                target_name = target.name
+            except AttributeError:
+                target_name = str(target)
+            try:
+                if self._spell_type == SpellType.DAMAGE:
+                    target.health = max(0, target.health - power)
+                    logs.append(f"{target_name}: -{power} HP")
+                elif self._spell_type == SpellType.HEAL:
+                    target.health += power
+                    logs.append(f"{target_name}: +{power} HP")
+                elif self._spell_type == SpellType.BUFF:
+                    target.attack += power
+                    target.health += power
+                    logs.append(f"{target_name}: +{power} Stats")
+                elif self._spell_type == SpellType.DEBUFF:
+                    target.attack = max(0, target.attack - power)
+                    logs.append(f"{target_name}: -{power} Stats")
+                else:
+                    logs.append(f"{target_name}: No effect")
+            except AttributeError:
+                print(f"{target_name} Error No Pv or attack")
+        return {"spell": self.name, "results": logs}

@@ -28,7 +28,9 @@ class GameEngine:
         ]
         self._cards_created += len(hand)
 
-        battlefield = ["Enemy Player"]
+        enemy_player = type(
+            'Target', (), {'name': 'Enemy Player', 'attack': 1, 'health': 30})()
+        battlefield = [enemy_player]
 
         turn_report = self._strategy.execute_turn(hand, battlefield)
         turn_report["current_hand"] = hand

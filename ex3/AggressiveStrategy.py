@@ -38,18 +38,21 @@ class AggressiveStrategy(GameStrategy):
             if cheapest_spell.cost <= current_mana:
                 cards_played_names.append(cheapest_spell.name)
                 current_mana -= cheapest_spell.cost
-                total_damage += cheapest_spell.damage
+                total_damage += cheapest_spell.cost * len(battlefield) + 3
 
         targets = self.prioritize_targets(battlefield)
-        target_name = targets[0] if targets else "Enemy Player"
+        try:
+            target_display = targets[0].name
+        except (AttributeError, IndexError):
+            target_display = "Enemy Player"
 
         report = {
             "strategy": self.get_strategy_name(),
             "actions": {
                 "cards_played": cards_played_names,
                 "mana_used": self.mana - current_mana,
-                "targets_attacked": [target_name],
-                "damage_dealt": total_damage
+                "targets_attacked": [target_display],
+                "damage_dealt": total_damage,
             }
         }
         return report
