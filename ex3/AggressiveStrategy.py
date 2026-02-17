@@ -21,10 +21,10 @@ class AggressiveStrategy(GameStrategy):
 
         spells: list[SpellCard] = [spell for spell in hand
                                    if spell.card_type == CardType.SPELL
-                                   and spell.effect_type == SpellType.DAMAGE]
+                                   and spell._spell_type == SpellType.DAMAGE]
 
         creatures.sort(key=lambda creature: creature.cost)
-        spells.sort(key=lambda spell: spell.cost, reverse=True)
+        spells.sort(key=lambda spell: spell.cost)
 
         if creatures:
             cheapest_creature = creatures[0]
@@ -34,11 +34,11 @@ class AggressiveStrategy(GameStrategy):
                 total_damage += cheapest_creature.attack
 
         if spells:
-            best_spell = spells[0]
-            if best_spell.cost <= current_mana:
-                cards_played_names.append(best_spell.name)
-                current_mana -= best_spell.cost
-                total_damage += best_spell.damage
+            cheapest_spell = spells[0]
+            if cheapest_spell.cost <= current_mana:
+                cards_played_names.append(cheapest_spell.name)
+                current_mana -= cheapest_spell.cost
+                total_damage += cheapest_spell.damage
 
         targets = self.prioritize_targets(battlefield)
         target_name = targets[0] if targets else "Enemy Player"

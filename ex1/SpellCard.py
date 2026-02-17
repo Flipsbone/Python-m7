@@ -36,6 +36,7 @@ class SpellCard(Card):
         self.effect_type = effect_type
         self._spell_type = SpellType.safe_get(self.effect_type)
         self.card_type = CardType.SPELL
+        self.damage = cost + 3
 
     def play(self, game_state: dict) -> dict:
         game_state['mana'] -= self.cost

@@ -4,6 +4,7 @@ from ex3.AggressiveStrategy import AggressiveStrategy
 
 
 def main():
+    print("=== DataDeck Game Engine ===\n")
     engine = GameEngine()
     factory = FantasyCardFactory()
     strategy = AggressiveStrategy()
@@ -16,13 +17,15 @@ def main():
     report = engine.simulate_turn()
     print("\nSimulating aggressive turn...")
     hand = report.get("current_hand", [])
-    display_hand = [f"{c.name} ({c.cost})" for c in hand]
-    print(f"Hand: [{', '.join(display_hand)}]")
+    display_hand = [f"{card.name} ({card.cost})" for card in hand]
+    print(f"Hand: [{', '.join(display_hand)}]\n")
 
     print("Turn execution:")
     print(f"Strategy: {report['strategy']}")
     print(f"Actions: {report['actions']}\n")
     print(f"Game Report:\n {engine.get_engine_status()}")
+    print("\nAbstract Factory + Strategy Pattern:"
+          "Maximum flexibility achieved!")
 
 
 if __name__ == "__main__":
