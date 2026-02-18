@@ -1,8 +1,8 @@
 from ex0.Card import Card
 from ex0.Card import CardType
 from ex0.CreatureCard import CreatureCard
-from ex2.Combatable import Combatable
 from ex2.Magical import Magical
+from ex2.Combatable import Combatable
 
 
 class EliteCard(Card, Combatable, Magical):
@@ -10,7 +10,7 @@ class EliteCard(Card, Combatable, Magical):
     def __init__(
             self, name: str, cost: int,
             rarity: str, attack: int = 0,
-            health: int = 1, defend: int = 0,
+            health: int = 1, armor: int = 0,
             initial_mana: int = 0,
             ) -> None:
         super().__init__(name, cost, rarity)
@@ -18,12 +18,12 @@ class EliteCard(Card, Combatable, Magical):
         try:
             self.attack_power = EliteCard.validate_data(attack)
             self.health = EliteCard.validate_data_health(health)
-            self.defend_resistance = EliteCard.validate_data(defend)
+            self.armor_value = EliteCard.validate_data(armor)
             self.mana_pool = EliteCard.validate_data(initial_mana)
         except (TypeError, ValueError) as e:
             print(f"Invalid data: {e}. Using defaults.")
             self.attack_power = 0
-            self.defend_resistance = 0
+            self.armor_value = 0
             self.health = 1
             self.mana_pool = 0
 
@@ -58,18 +58,26 @@ class EliteCard(Card, Combatable, Magical):
 
     def attack(self, target: "EliteCard | CreatureCard") -> dict:
         damage = self.attack_power
-        defense_info = target.defend(damage)
+        if isinstance(target, Combatable):
+            defense_info = target.defend(damage)
+            damage_dealt = defense_info["damage_taken"]
+        else:
+            previous_health = target.health
+            target.health -= damage
+            if target.health < 0:
+                target.health = 0
+            damage_dealt = previous_health - target.health
 
         attack_result: dict[str, str | int] = {
             "attacker": self.name,
             "target": target.name,
-            "damage_dealt": defense_info["damage_taken"],
+            "damage_dealt": damage_dealt,
             "combat_type": "melee"
         }
         return attack_result
 
     def defend(self, incoming_damage: int) -> dict:
-        damage_blocked = min(incoming_damage, self.defend_resistance)
+        damage_blocked = min(incoming_damage, self.armor_value)
         damage_taken = incoming_damage - damage_blocked
         self.health -= damage_taken
         if self.health < 0:
@@ -86,7 +94,7 @@ class EliteCard(Card, Combatable, Magical):
     def get_combat_stats(self) -> dict:
         return {
             "damage": self.attack_power,
-            "defense": self.defend_resistance,
+            "defense": self.armor_value,
             "health": self.health
             }
 

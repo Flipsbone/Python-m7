@@ -11,14 +11,20 @@ class CardRarity(Enum):
     UNKNOWN_RARITY = "Unknown_rarity"
 
     @classmethod
-    def safe_get(cls, value: str):
-        try:
-            return cls(value)
-        except ValueError:
-            print(f"{value} of {cls.__name__} is not a define type so"
-                  "it would automatically transform into rarity:"
-                  "'Unknown_rarity'")
-            return cls.UNKNOWN_RARITY
+    def get_rarity(cls, string: str) -> "CardRarity":
+        mapping = {
+            "common": cls.COMMON,
+            "uncommon": cls.UNCOMMON,
+            "rare": cls.RARE,
+            "epic": cls.EPIC,
+            "legendary": cls.LEGENDARY
+        }
+        key = string.lower().strip()
+        if key in mapping:
+            return mapping[key]
+        print(f"Warning: '{string}' is not a valid rarity. "
+              "Defaulting to 'Unknown_rarity'.")
+        return cls.UNKNOWN_RARITY
 
 
 class CardType(Enum):
@@ -38,7 +44,7 @@ class Card(ABC):
             print({e})
             self.cost = 0
 
-        self.rarity = CardRarity.safe_get(rarity)
+        self.rarity = CardRarity.get_rarity(rarity)
 
     @staticmethod
     def validate_data(cost: int) -> None:

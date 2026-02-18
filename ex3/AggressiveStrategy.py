@@ -61,8 +61,13 @@ class AggressiveStrategy(GameStrategy):
         return "AggressiveStrategy"
 
     def prioritize_targets(self, available_targets: list) -> list:
-        others = [target for target in available_targets
-                  if target != "Enemy Player"]
+        others = []
+        for target in available_targets:
+            try:
+                if target.name != "Enemy Player":
+                    others.append(target)
+            except AttributeError:
+                pass
         if others:
             return others
         else:

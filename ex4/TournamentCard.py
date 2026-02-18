@@ -64,14 +64,15 @@ class TournamentCard(Card, Combatable, Rankable):
         return attack_result
 
     def calculate_rating(self) -> int:
-        self.rating = self.rating + (self.wins * 16) - (self.losses * 16)
+        base_rating = 1200
+        self.rating = base_rating + (self.wins * 16) - (self.losses * 16)
         return self.rating
 
     def get_tournament_stats(self) -> dict:
         return {
             "rating": self.rating,
             "wins": self.wins,
-            "loses": self.losses,
+            "losses": self.losses,
          }
 
     def update_wins(self, wins: int) -> None:
@@ -108,3 +109,7 @@ class TournamentCard(Card, Combatable, Rankable):
             "attack": self.attack_value,
             "armor": self.armor_value
         }
+
+    @classmethod
+    def get_interfaces(cls) -> list:
+        return [base.__name__ for base in cls.__bases__]

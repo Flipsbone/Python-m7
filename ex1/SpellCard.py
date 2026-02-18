@@ -11,20 +11,17 @@ class SpellType(Enum):
     UNKNOWN_SPELL = "Unknown_spell"
 
     @classmethod
-    def safe_get(cls, string: str):
+    def get_type(cls, string: str) -> "SpellType":
         mapping = {
             "damage": cls.DAMAGE,
             "heal": cls.HEAL,
             "buff": cls.BUFF,
             "debuff": cls.DEBUFF
         }
-
-        lower_string = string.lower()
-        for keyword, s_type in mapping.items():
-            if keyword in lower_string:
-                return s_type
-        print(f"{string} of {cls.__name__} is not a define type so "
-              "it would automatically transform into : 'Unknown_spell'")
+        key = string.lower().strip()
+        if key in mapping:
+            return mapping[key]
+        print(f"Warning: type '{string}', default Unknown_spell")
         return cls.UNKNOWN_SPELL
 
 
@@ -34,7 +31,7 @@ class SpellCard(Card):
                  effect_type: str) -> None:
         super().__init__(name, cost, rarity)
         self.effect_type = effect_type
-        self._spell_type = SpellType.safe_get(self.effect_type)
+        self._spell_type = SpellType.get_type(self.effect_type)
         self.card_type = CardType.SPELL
 
     def play(self, game_state: dict) -> dict:

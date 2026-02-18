@@ -13,7 +13,7 @@ class FantasyCardFactory(CardFactory):
             "Wizard": {"name": "Ice Wizard", "cost": 4, "rarity": "Rare", "attack": 3, "health": 4},  # noqa: E501
             "Elemental": {"name": "Lightning Elemental", "cost": 3, "rarity": "Uncommon", "attack": 4, "health": 2},  # noqa: E501
             "Golem": {"name": "Stone Golem", "cost": 6, "rarity": "Rare", "attack": 5, "health": 8},  # noqa: E501
-            "Assasin": {"name": "Shadow Assassin", "cost": 3, "rarity": "Uncommon", "attack": 5, "health": 2},  # noqa: E501
+            "Assassin": {"name": "Shadow Assassin", "cost": 3, "rarity": "Uncommon", "attack": 5, "health": 2},  # noqa: E501
             "Angel": {"name": "Healing Angel", "cost": 4, "rarity": "Rare", "attack": 2, "health": 6},  # noqa: E501
             "Sprite": {"name": "Forest Sprite", "cost": 1, "rarity": "Common", "attack": 1, "health": 1},  # noqa: E501
         }
