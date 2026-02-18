@@ -9,41 +9,42 @@ class EliteCard(Card, Combatable, Magical):
 
     def __init__(
             self, name: str, cost: int,
-            rarity: str, attack: int,
-            health: int, defend: int,
-            initial_mana: int,
+            rarity: str, attack: int = 0,
+            health: int = 1, defend: int = 0,
+            initial_mana: int = 0,
             ) -> None:
         super().__init__(name, cost, rarity)
 
         try:
-            EliteCard.validate_data(attack, health, defend, initial_mana)
+            self.attack_power = EliteCard.validate_data(attack)
+            self.health = EliteCard.validate_data_health(health)
+            self.defend_resistance = EliteCard.validate_data(defend)
+            self.mana_pool = EliteCard.validate_data(initial_mana)
         except (TypeError, ValueError) as e:
-            print({e})
-            attack, health, defend, initial_mana = 0, 1, 0, 0
+            print(f"Invalid data: {e}. Using defaults.")
+            self.attack_power = 0
+            self.defend_resistance = 0
+            self.health = 1
+            self.mana_pool = 0
 
-        self.attack_power = attack
-        self.health = health
-        self.defend_resistance = defend
-        self.mana_pool = initial_mana
         self._spells = {"Fireball": 4, "Heal": 3, "Shield": 2}
         self.type = CardType.ELITE
 
     @staticmethod
-    def validate_data(
-            attack: int, health: int, defend: int, initial_mana: int) -> None:
-        stats = {
-            "attack": attack, "defend": defend, "mana": initial_mana
-            }
-        for stat, value in stats.items():
-            if not isinstance(value, int):
-                raise TypeError(f"Error :{stat} must be an integer")
-            if value < 0:
-                raise ValueError(f"Error :{stat} must be 0 or more")
+    def validate_data(value: int) -> int:
+        if not isinstance(value, int):
+            raise TypeError(f"Error :{value} must be an integer")
+        if value < 0:
+            raise ValueError(f"Error :{value} must be positif integer")
+        return value
 
+    @staticmethod
+    def validate_data_health(health: int) -> int:
         if not isinstance(health, int):
-            raise TypeError(f"Error :{stat} must be integer")
+            raise TypeError(f"Error :{health} must be an integer")
         if health <= 0:
-            raise ValueError(f"Error :{stat} must be positif integer")
+            raise ValueError(f"Error :{health} must be more than 0")
+        return health
 
     def play(self, game_state: dict) -> dict:
         game_state['mana'] -= self.cost
@@ -57,14 +58,12 @@ class EliteCard(Card, Combatable, Magical):
 
     def attack(self, target: "EliteCard | CreatureCard") -> dict:
         damage = self.attack_power
+        defense_info = target.defend(damage)
 
-        target.health -= damage
-        if target.health < 0:
-            target.health = 0
         attack_result: dict[str, str | int] = {
             "attacker": self.name,
             "target": target.name,
-            "damage": damage,
+            "damage_dealt": defense_info["damage_taken"],
             "combat_type": "melee"
         }
         return attack_result
