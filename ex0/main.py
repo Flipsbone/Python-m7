@@ -8,7 +8,7 @@ def play_card(
     dragon = creatures_cards["fire_dragon"]
     goblin = creatures_cards["goblin_warrior"]
     if not dragon.is_playable(game_state["mana"]):
-        print(f"Testing insufficient mana {game_state['mana']}")
+        print(f"Testing insufficient mana ({game_state['mana']} available)")
         print("Playable: False\n")
         return
 
@@ -17,9 +17,9 @@ def play_card(
 
     play_result = creatures_cards["fire_dragon"].play(game_state)
     print(f"Play result: {play_result}\n")
-    print(f"{dragon.name} attacks {goblin.name}")
+    print(f"{dragon.name} attacks {goblin.name}:")
     attack_result = (dragon.attack_target(goblin))
-    print(f"{attack_result}\n")
+    print(f"Attack result: {attack_result}\n")
 
 
 def creaturecard_info(creatures_cards: dict[str, CreatureCard]) -> None:

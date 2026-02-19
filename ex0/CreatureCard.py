@@ -7,32 +7,29 @@ class CreatureCard(Card):
                  attack: int, health: int) -> None:
         super().__init__(name, cost, rarity)
         try:
-            self.attack = self.validate_data(attack)
+            self.attack = Card.validate_data(attack)
+        except (TypeError, ValueError) as e:
+            print(f"Invalid attack : {e}. Using defaults attack = 0 ")
+            self.attack = 0
+        try:
             self.health = self.validate_data_health(health)
         except (TypeError, ValueError) as e:
-            print(f"Invalid tournament data: {e}. Using defaults.")
-            self.attack = 0
+            print(f"Invalid health: {e}. Using defaults health = 1")
             self.health = 1
 
         self.card_type = CardType.CREATURE
 
     @staticmethod
-    def validate_data(value: int) -> int:
-        if not isinstance(value, int):
-            raise TypeError(f"Error :{value} must be an integer")
-        if value < 0:
-            raise ValueError(f"Error :{value} must be positif integer")
-        return value
-
-    @staticmethod
     def validate_data_health(health: int) -> int:
         if not isinstance(health, int):
-            raise TypeError(f"Error :{health} must be an integer")
+            raise TypeError(f"{health} must be an integer")
         if health <= 0:
-            raise ValueError(f"Error :{health} must be positif integer")
+            raise ValueError(f"{health} must be positif integer")
         return health
 
     def play(self, game_state: dict) -> dict:
+        if not self.is_playable(game_state.get('mana', 0)):
+            return {"error": "Not enough mana"}
         game_state['mana'] -= self.cost
         play_result = {
             "card_played": self.name,

@@ -12,16 +12,16 @@ class CardRarity(Enum):
 
     @classmethod
     def get_rarity(cls, string: str) -> "CardRarity":
-        mapping = {
-            "common": cls.COMMON,
-            "uncommon": cls.UNCOMMON,
-            "rare": cls.RARE,
-            "epic": cls.EPIC,
-            "legendary": cls.LEGENDARY
-        }
-        key = string.lower().strip()
-        if key in mapping:
-            return mapping[key]
+        if not isinstance(string, str):
+            print(f"Warning: '{string}' is not a valid rarity. "
+                  "Defaulting to 'Unknown_rarity'.")
+            return cls.UNKNOWN_RARITY
+
+        key = string.upper().strip()
+
+        if key in cls.__members__:
+            return cls[key]
+
         print(f"Warning: '{string}' is not a valid rarity. "
               "Defaulting to 'Unknown_rarity'.")
         return cls.UNKNOWN_RARITY
@@ -41,17 +41,18 @@ class Card(ABC):
             Card.validate_data(cost)
             self.cost = cost
         except (TypeError, ValueError) as e:
-            print({e})
+            print(f"Error cost : {e}")
             self.cost = 0
 
         self.rarity = CardRarity.get_rarity(rarity)
 
     @staticmethod
-    def validate_data(cost: int) -> None:
+    def validate_data(cost: int) -> int:
         if not isinstance(cost, int):
-            raise TypeError(f"Error :{cost} must be an integer")
+            raise TypeError(f"{cost} must be an integer")
         if cost < 0:
-            raise ValueError(f"Error :{cost} must be 0 or more")
+            raise ValueError(f"{cost} must be 0 or more")
+        return cost
 
     @abstractmethod
     def play(self, game_state: dict) -> dict:
