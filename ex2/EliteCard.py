@@ -16,38 +16,34 @@ class EliteCard(Card, Combatable, Magical):
         super().__init__(name, cost, rarity)
 
         try:
-            self.attack_power = EliteCard.validate_data(attack)
-            self.health = EliteCard.validate_data_health(health)
-            self.armor_value = EliteCard.validate_data(armor)
-            self.mana_pool = EliteCard.validate_data(initial_mana)
+            self.attack_power = Card.validate_data(attack)
         except (TypeError, ValueError) as e:
-            print(f"Invalid data: {e}. Using defaults.")
-            self.attack_power = 0
-            self.armor_value = 0
+            print(f"Invalid attack : {e}. Using defaults attack = 0 ")
+            self.attack = 0
+        try:
+            self.health = Card.validate_data_health(health)
+        except (TypeError, ValueError) as e:
+            print(f"Invalid health: {e}. Using defaults health = 1")
             self.health = 1
+        try:
+            self.armor_value = Card.validate_data(armor)
+        except (TypeError, ValueError) as e:
+            print(f"Invalid armor : {e}. Using defaults armor = 0 ")
+            self.armor_value = 0
+        try:
+            self.mana_pool = Card.validate_data(initial_mana)
+        except (TypeError, ValueError) as e:
+            print(f"Invalid initial_mana: {e}.Using defaults initial_mana = 0")
             self.mana_pool = 0
 
         self._spells = {"Fireball": 4, "Heal": 3, "Shield": 2}
-        self.type = CardType.ELITE
-
-    @staticmethod
-    def validate_data(value: int) -> int:
-        if not isinstance(value, int):
-            raise TypeError(f"Error :{value} must be an integer")
-        if value < 0:
-            raise ValueError(f"Error :{value} must be positif integer")
-        return value
-
-    @staticmethod
-    def validate_data_health(health: int) -> int:
-        if not isinstance(health, int):
-            raise TypeError(f"Error :{health} must be an integer")
-        if health <= 0:
-            raise ValueError(f"Error :{health} must be more than 0")
-        return health
+        self._card_type = CardType.ELITE
 
     def play(self, game_state: dict) -> dict:
-        game_state['mana'] -= self.cost
+        result = super().play(game_state)
+        if "error" in result:
+            return result
+
         play_result = {
             "card_played": self.name,
             "mana_used": self.cost,
@@ -71,7 +67,7 @@ class EliteCard(Card, Combatable, Magical):
         attack_result: dict[str, str | int] = {
             "attacker": self.name,
             "target": target.name,
-            "damage_dealt": damage_dealt,
+            "damage": damage_dealt,
             "combat_type": "melee"
         }
         return attack_result
@@ -120,3 +116,14 @@ class EliteCard(Card, Combatable, Magical):
 
     def get_magic_stats(self) -> dict:
         return {"mana_pool": self.mana_pool}
+
+    def get_card_info(self) -> dict:
+        card_info: dict[str, str | int] = super().get_card_info()
+        card_info.update({
+            "type": self._card_type.value,
+            "attack": self.attack_power,
+            "health": self.health,
+            "armor": self.armor_value,
+            "mana_pool": self.mana_pool
+        })
+        return card_info

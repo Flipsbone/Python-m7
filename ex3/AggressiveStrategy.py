@@ -16,11 +16,11 @@ class AggressiveStrategy(GameStrategy):
         total_damage: int = 0
 
         creatures: list[CreatureCard] = [creature for creature
-                                         in hand if creature.card_type
+                                         in hand if creature._card_type
                                          == CardType.CREATURE]
 
         spells: list[SpellCard] = [spell for spell in hand
-                                   if spell.card_type == CardType.SPELL
+                                   if spell._card_type == CardType.SPELL
                                    and spell._spell_type == SpellType.DAMAGE]
 
         creatures.sort(key=lambda creature: creature.cost)

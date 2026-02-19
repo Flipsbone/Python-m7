@@ -3,7 +3,7 @@ from ex0.CreatureCard import CreatureCard
 
 
 def create_creature() -> dict[str, CreatureCard]:
-    enemy_card = CreatureCard("Enemy", 5, "Legendary", 7, 5)
+    enemy_card = CreatureCard("Enemy", 5, "Legendary", 5, 5)
     goblin_warrior_card = CreatureCard("Goblin Warrior", 2, "Common", 2, 1)
     creatures_cards = {
         "enemy": enemy_card,
@@ -38,7 +38,8 @@ def elitecard_capabilities(card_class: EliteCard) -> None:
         if base.__name__ in interfaces:
             methods = []
             for name in dir(base):
-                if name[0] != "_" and name != "validate_data":
+                if name[0] != "_" and name not in (
+                        "validate_data", "validate_data_health"):
                     methods.append(name)
             methods.sort()
             print(f"- {base.__name__}: {methods}")

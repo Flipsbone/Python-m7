@@ -22,7 +22,7 @@ def drawing_card(my_deck: Deck, game_state: dict[str, int]) -> None:
     print("Drawing and playing cards:\n")
     while len(my_deck.cards) > 0:
         card_drawn = my_deck.draw_card()
-        print(f"Drew:{card_drawn.name} ({card_drawn.__class__.__name__})")
+        print(f"Drew: {card_drawn.name} ({card_drawn.__class__.__name__})")
         play_card(card_drawn, game_state)
 
 

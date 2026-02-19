@@ -7,16 +7,19 @@ class ArtifactCard(Card):
     def __init__(self, name: str, cost: int, rarity: str,
                  durability: int, effect: str) -> None:
         super().__init__(name, cost, rarity)
-        if not isinstance(durability, int):
-            raise TypeError(f"Error :{durability} must be integer")
-        if durability <= 0:
-            raise ValueError(f"Error :{durability} must be 0 or more")
-        self.durability = durability
+        try:
+            self.durability = Card.validate_data(durability)
+        except (TypeError, ValueError) as e:
+            print(f"Invalid durability : {e}. Using defaults durability = 0 ")
+            self.durability = 0
         self.effect = effect
-        self.card_type = CardType.ARTIFACT
+        self._card_type = CardType.ARTIFACT
 
     def play(self, game_state: dict) -> dict:
-        game_state['mana'] -= self.cost
+        result = super().play(game_state)
+        if "error" in result:
+            return result
+
         play_result = {
             "card_played": self.name,
             "mana_used": self.cost,
@@ -82,3 +85,12 @@ class ArtifactCard(Card):
                 "effect": action_data,
                 "new_durability": self.durability
             }
+
+    def get_card_info(self) -> dict:
+        card_info: dict[str, str | int] = super().get_card_info()
+        card_info.update({
+            "type": self._card_type.value,
+            "durability": self.durability,
+            "effect": self.effect
+        })
+        return card_info

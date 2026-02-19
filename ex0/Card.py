@@ -44,7 +44,7 @@ class Card(ABC):
             print(f"Error cost : {e}")
             self.cost = 0
 
-        self.rarity = CardRarity.get_rarity(rarity)
+        self._rarity = CardRarity.get_rarity(rarity)
 
     @staticmethod
     def validate_data(cost: int) -> int:
@@ -54,15 +54,27 @@ class Card(ABC):
             raise ValueError(f"{cost} must be 0 or more")
         return cost
 
+    @staticmethod
+    def validate_data_health(health: int) -> int:
+        if not isinstance(health, int):
+            raise TypeError(f"{health} must be an integer")
+        if health <= 0:
+            raise ValueError(f"{health} must be positif integer")
+        return health
+
     @abstractmethod
     def play(self, game_state: dict) -> dict:
-        pass
+        if not self.is_playable(game_state.get('mana', 0)):
+            return {"error": "Not enough mana"}
+
+        game_state['mana'] -= self.cost
+        return {"status": "success"}
 
     def get_card_info(self) -> dict:
         return {
             "name": self.name,
             "cost": self.cost,
-            "rarity": self.rarity.value,
+            "rarity": self._rarity.value,
         }
 
     def is_playable(self, available_mana: int) -> bool:
