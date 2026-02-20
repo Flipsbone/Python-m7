@@ -50,7 +50,7 @@ class SpellCard(Card):
 
     def resolve_effect(self, targets: list) -> dict:
         power = self.cost
-        logs: list[str] = []
+        result_spell: list[str] = []
 
         for target in targets:
             try:
@@ -60,22 +60,22 @@ class SpellCard(Card):
             try:
                 if self._spell_type == SpellType.DAMAGE:
                     target.health = max(0, target.health - power)
-                    logs.append(f"{target_name}: -{power} HP")
+                    result_spell.append(f"{target_name}: -{power} HP")
                 elif self._spell_type == SpellType.HEAL:
                     target.health += power
-                    logs.append(f"{target_name}: +{power} HP")
+                    result_spell.append(f"{target_name}: +{power} HP")
                 elif self._spell_type == SpellType.BUFF:
                     target.attack += power
                     target.health += power
-                    logs.append(f"{target_name}: +{power} Stats")
+                    result_spell.append(f"{target_name}: +{power} Stats")
                 elif self._spell_type == SpellType.DEBUFF:
                     target.attack = max(0, target.attack - power)
-                    logs.append(f"{target_name}: -{power} Stats")
+                    result_spell.append(f"{target_name}: -{power} Stats")
                 else:
-                    logs.append(f"{target_name}: No effect")
+                    result_spell.append(f"{target_name}: No effect")
             except AttributeError:
                 print(f"{target_name} Error No Pv or attack")
-        return {"spell": self.name, "results": logs}
+        return {"spell": self.name, "results": result_spell}
 
     def get_card_info(self) -> dict:
         card_info: dict[str, str | int] = super().get_card_info()
