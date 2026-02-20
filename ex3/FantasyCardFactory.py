@@ -8,30 +8,50 @@ from ex3.CardFactory import CardFactory
 class FantasyCardFactory(CardFactory):
     def __init__(self) -> None:
         self._creatures = {
-            "Dragon": {"name": "Fire Dragon", "cost": 5, "rarity": "Legendary", "attack": 7, "health": 5},  # noqa: E501
-            "Goblin": {"name": "Goblin Warrior", "cost": 2, "rarity": "Common", "attack": 2, "health": 1},  # noqa: E501
-            "Wizard": {"name": "Ice Wizard", "cost": 4, "rarity": "Rare", "attack": 3, "health": 4},  # noqa: E501
-            "Elemental": {"name": "Lightning Elemental", "cost": 3, "rarity": "Uncommon", "attack": 4, "health": 2},  # noqa: E501
-            "Golem": {"name": "Stone Golem", "cost": 6, "rarity": "Rare", "attack": 5, "health": 8},  # noqa: E501
-            "Assassin": {"name": "Shadow Assassin", "cost": 3, "rarity": "Uncommon", "attack": 5, "health": 2},  # noqa: E501
-            "Angel": {"name": "Healing Angel", "cost": 4, "rarity": "Rare", "attack": 2, "health": 6},  # noqa: E501
-            "Sprite": {"name": "Forest Sprite", "cost": 1, "rarity": "Common", "attack": 1, "health": 1},  # noqa: E501
+            "Dragon": {"name": "Fire Dragon", "cost": 5,
+                       "rarity": "Legendary", "attack": 7, "health": 5},
+            "Goblin": {"name": "Goblin Warrior", "cost": 2,
+                       "rarity": "Common", "attack": 2, "health": 1},
+            "Wizard": {"name": "Ice Wizard", "cost": 4, "rarity": "Rare",
+                       "attack": 3, "health": 4},
+            "Elemental": {"name": "Lightning Elemental", "cost": 3,
+                          "rarity": "Uncommon", "attack": 4, "health": 2},
+            "Golem": {"name": "Stone Golem", "cost": 6, "rarity": "Rare",
+                      "attack": 5, "health": 8},
+            "Assassin": {"name": "Shadow Assassin", "cost": 3,
+                         "rarity": "Uncommon", "attack": 5, "health": 2},
+            "Angel": {"name": "Healing Angel", "cost": 4, "rarity": "Rare",
+                      "attack": 2, "health": 6},
+            "Sprite": {"name": "Forest Sprite", "cost": 1,
+                       "rarity": "Common", "attack": 1, "health": 1},
         }
 
         self._spells = {
-            "Bolt": {"name": "Lightning Bolt", "cost": 3, "rarity": "Common", "effect_type": "damage"},  # noqa: E501
-            "Fireball": {"name": "Fireball", "cost": 4, "rarity": "Uncommon", "effect_type": "damage"},  # noqa: E501
-            "Ice": {"name": "Ice Shard", "cost": 2, "rarity": "Common", "effect_type": "damage"},  # noqa: E501
+            "Bolt": {"name": "Lightning Bolt", "cost": 3,
+                     "rarity": "Common", "effect_type": "damage"},
+            "Fireball": {"name": "Fireball", "cost": 4,
+                         "rarity": "Uncommon", "effect_type": "damage"},
+            "Ice": {"name": "Ice Shard", "cost": 2, "rarity": "Common",
+                    "effect_type": "damage"},
         }
 
         self._artifacts = {
-            "Crystal": {"name": "Mana Crystal", "cost": 2, "rarity": "Common", "durability": 5, "effect": "Permanent: +1 mana per turn"},  # noqa: E501
-            "Ring": {"name": "Ring of Wisdom", "cost": 4, "rarity": "Rare", "durability": 4, "effect": "Permanent: Draw an extra card each turn"},  # noqa: E501
-            "Staff": {"name": "Staff of Elements", "cost": 6, "rarity": "Legendary", "durability": 7, "effect": "Permanent: +1 spell damage"},  # noqa: E501
+            "Crystal": {"name": "Mana Crystal",
+                        "cost": 2,
+                        "rarity": "Common",
+                        "durability": 5,
+                        "effect": "Permanent: +1 mana per turn"},
+            "Ring": {"name": "Ring of Wisdom",
+                     "cost": 4,
+                     "rarity": "Rare", "durability": 4,
+                     "effect": "Permanent: Draw an extra card each turn"},
+            "Staff": {"name": "Staff of Elements", "cost": 6,
+                      "rarity": "Legendary", "durability": 7,
+                      "effect": "Permanent: +1 spell damage"},
         }
 
     def create_creature(self, name_or_power: str | int | None = None) -> Card:
-        creature_data = self._find_data(self._creatures, name_or_power)
+        creature_data = self.find_data(self._creatures, name_or_power)
         return CreatureCard(
             creature_data["name"],
             creature_data["cost"],
@@ -41,7 +61,7 @@ class FantasyCardFactory(CardFactory):
             )
 
     def create_spell(self, name_or_power: str | int | None = None) -> Card:
-        spell_data = self._find_data(self._spells, name_or_power)
+        spell_data = self.find_data(self._spells, name_or_power)
         return SpellCard(
             spell_data["name"],
             spell_data["cost"],
@@ -50,7 +70,7 @@ class FantasyCardFactory(CardFactory):
             )
 
     def create_artifact(self, name_or_power: str | int | None = None) -> Card:
-        artifact_data = self._find_data(self._artifacts, name_or_power)
+        artifact_data = self.find_data(self._artifacts, name_or_power)
         return ArtifactCard(
             artifact_data["name"],
             artifact_data["cost"],
@@ -60,7 +80,7 @@ class FantasyCardFactory(CardFactory):
         )
 
     @staticmethod
-    def _find_data(registry: dict, key: str | int | None) -> dict:
+    def find_data(registry: dict, key: str | int | None) -> dict:
         if not registry:
             raise ValueError("Registry is empty")
         default_card = list(registry.values())[0]

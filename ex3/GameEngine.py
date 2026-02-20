@@ -6,9 +6,9 @@ class GameEngine:
     def __init__(self) -> None:
         self._factory: CardFactory | None = None
         self._strategy: GameStrategy | None = None
-        self._turns_simulated = 0
-        self._total_damage = 0
-        self._cards_created = 0
+        self._turns_simulated: int = 0
+        self._total_damage: int = 0
+        self._cards_created: int = 0
 
     def configure_engine(
             self, factory: CardFactory, strategy: GameStrategy) -> None:

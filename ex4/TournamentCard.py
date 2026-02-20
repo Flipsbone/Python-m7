@@ -4,44 +4,29 @@ from ex4.Rankable import Rankable
 
 
 class TournamentCard(Card, Combatable, Rankable):
-    def __init__(self, name: str, cost: int,
-                 rarity: str, attack: int,
-                 health: int, armor: int = 0,
-                 wins: int = 0, losses: int = 0,
-                 rating: int = 1200):
+    def __init__(self, name: str, cost: int, rarity: str,
+                 attack: int, health: int, armor: int) -> None:
         super().__init__(name, cost, rarity)
 
+        self.wins: int = 0
+        self.losses: int = 0
+        self.rating: int = 1200
+
         try:
-            self.attack_value = TournamentCard.validate_data(attack)
-            self.health_point = TournamentCard.validate_data_health(health)
-            self.armor_value = TournamentCard.validate_data(armor)
-            self.wins = TournamentCard.validate_data(wins)
-            self.losses = TournamentCard.validate_data(losses)
-            self.rating = TournamentCard.validate_data(rating)
+            self.attack_value = Card.validate_data(attack)
         except (TypeError, ValueError) as e:
-            print(f"Invalid tournament data: {e}. Using defaults.")
-            self.attack_value = 0
+            print(f"Invalid attack : {e}. Using defaults attack = 0 ")
+            self.attack = 0
+        try:
+            self.health_point = Card.validate_data_health(health)
+        except (TypeError, ValueError) as e:
+            print(f"Invalid health: {e}. Using defaults health = 1")
             self.health_point = 1
+        try:
+            self.armor_value = Card.validate_data(armor)
+        except (TypeError, ValueError) as e:
+            print(f"Invalid armor : {e}. Using defaults armor = 0 ")
             self.armor_value = 0
-            self.wins = 0
-            self.losses = 0
-            self.rating = 1200
-
-    @staticmethod
-    def validate_data(value: int) -> int:
-        if not isinstance(value, int):
-            raise TypeError(f"Error :{value} must be an integer")
-        if value < 0:
-            raise ValueError(f"Error :{value} must be 0 or more")
-        return value
-
-    @staticmethod
-    def validate_data_health(health: int) -> int:
-        if not isinstance(health, int):
-            raise TypeError(f"Error :{health} must be an integer")
-        if health <= 0:
-            raise ValueError(f"Error :{health} must be positif integer")
-        return health
 
     def play(self, game_state: dict) -> dict:
         game_state['mana'] -= self.cost
