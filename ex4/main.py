@@ -28,10 +28,14 @@ def match(platform: TournamentPlatform,
 def tournament_cards(platform: TournamentPlatform) -> list:
     print("Registering Tournament Cards...\n")
     list_id: list[TournamentCard] = []
-    c1 = TournamentCard("Fire Dragon", cost=8, rarity="Epic",
-                        attack=10, health=50, rating=1200)
-    c2 = TournamentCard("Ice Wizard", cost=5, rarity="Rare",
-                        attack=6, health=30, rating=1150)
+    c1 = TournamentCard("Fire Dragon", cost=8,
+                        rarity="Epic", attack=10,
+                        health=50, armor=5,
+                        rating=1200)
+    c2 = TournamentCard("Ice Wizard", cost=5,
+                        rarity="Rare", attack=6,
+                        health=30, armor=2,
+                        rating=1150)
     id1 = platform.register_card(c1)
     list_id.append(id1)
     id2 = platform.register_card(c2)
@@ -43,7 +47,7 @@ def tournament_cards(platform: TournamentPlatform) -> list:
         print(f"- Interfaces: [{interfaces_str}]")
         print(f"- Rating: {card.rating}")
         stats = card.get_tournament_stats()
-        print("- Record:"
+        print("- Record: "
               f"{stats['wins']}-{stats['losses']}\n")
 
     return list_id

@@ -49,7 +49,7 @@ def elitecard_capabilities(card_class: EliteCard) -> None:
 def main() -> None:
     print("=== DataDeck Ability System === \n")
     Arcane_Warrior_card = EliteCard("Arcane Warrior", 5, "Legendary",
-                                    7, 5, 3, 0)
+                                    7, 5, 3, 4)
     elitecard_capabilities(EliteCard)
     playing_arcane(Arcane_Warrior_card)
     print("Multiple interface implementation successful!")

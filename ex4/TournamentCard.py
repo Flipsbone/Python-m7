@@ -5,12 +5,11 @@ from ex4.Rankable import Rankable
 
 class TournamentCard(Card, Combatable, Rankable):
     def __init__(self, name: str, cost: int, rarity: str,
-                 attack: int, health: int, armor: int) -> None:
+                 attack: int, health: int, armor: int, rating: int) -> None:
         super().__init__(name, cost, rarity)
 
         self.wins: int = 0
         self.losses: int = 0
-        self.rating: int = 1200
 
         try:
             self.attack_value = Card.validate_data(attack)
@@ -27,9 +26,19 @@ class TournamentCard(Card, Combatable, Rankable):
         except (TypeError, ValueError) as e:
             print(f"Invalid armor : {e}. Using defaults armor = 0 ")
             self.armor_value = 0
+        try:
+            self.rating = Card.validate_data(rating)
+        except (TypeError, ValueError) as e:
+            print(f"Invalid rating : {e}. Using defaults rating = 1500 ")
+            self.rating = 1500
+
+        self.base_rating: int = self.rating
 
     def play(self, game_state: dict) -> dict:
-        game_state['mana'] -= self.cost
+        result = super().play(game_state)
+        if "error" in result:
+            return result
+
         return {
             "card_played": self.name,
             "mana_used": self.cost,
@@ -49,8 +58,7 @@ class TournamentCard(Card, Combatable, Rankable):
         return attack_result
 
     def calculate_rating(self) -> int:
-        base_rating = 1200
-        self.rating = base_rating + (self.wins * 16) - (self.losses * 16)
+        self.rating = self.base_rating + (self.wins * 16) - (self.losses * 16)
         return self.rating
 
     def get_tournament_stats(self) -> dict:
